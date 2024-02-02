@@ -1,10 +1,8 @@
-# Localized PSEventMessageResources.psd1
-
-
-
-ConvertFrom-StringData @'
-
-DestPath_F1=Destination path: {0}
+﻿# This is where the strings go, that are written by
+# Write-PSFMessage, Stop-PSFFunction or the PSFramework validation scriptblocks
+@{
+	'key' = 'Value'
+	DestPath_F1=Destination path: {0}
 
 ErrorFailedToLoadStoreFile_F1=Failed to load the default value store file: '{0}'.
 
@@ -89,6 +87,4 @@ TempFileOperation_F1={0} into temp file before copying to destination
 TempFileTarget_F1=temp file for '{0}'
 
 LoggerProvider_WriteLog = write log info message
-
-
-'@
+}
