@@ -94,21 +94,6 @@
 	}
 
 	Begin {
-		If ($PSBoundParameters['Debug']) {
-			$DebugPreference = 'Continue'
-		}
-		Write-Debug "[BEGIN]"
-		If ($PSBoundParameters.ContainsKey('Verbose')) {
-			Write-Verbose "Displaying PSBoundParameters"
-			$PSBoundParameters.GetEnumerator() | ForEach-Object {
-				Write-Verbose $_
-			}
-			Write-Verbose "Displaying ParameterSets"
-			$PsCmdlet.ParameterSetName | ForEach-Object	{
-				Write-Verbose "[ParameterSetName, $_]"
-			}
-		}
-
 		$dateTimeNowProviderType = "Isystem.Infrastructure.Core.$DateTimeNowProvider" -as [type]
 		$loggerProviderType = "Isystem.Infrastructure.Logging.$LoggerProvider" -as [type]
 
@@ -121,7 +106,6 @@
 	}
 
 	Process {
-		Write-Debug "[PROCESS]"
 		switch ($LoggerProvider) {
 			ConsoleLogger {
 				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProviders
@@ -145,7 +129,6 @@
 	}
 
 	End {
-		Write-Debug "[END]"
-		Write-Output $loggerProvider
+		$loggerProvider
 	}
 }

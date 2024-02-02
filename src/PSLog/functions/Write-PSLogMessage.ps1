@@ -70,22 +70,6 @@
 	)
 
 	Begin {
-		If ($PSBoundParameters['Debug']) {
-			$DebugPreference = 'Continue'
-		}
-
-		Write-Debug "[BEGIN]"
-		$resolveOvfTestParameterSetNames = 'Message'
-		If ($PSBoundParameters.ContainsKey('Verbose')) {
-			Write-Verbose "Displaying PSBoundParameters"
-			$PSBoundParameters.GetEnumerator() | ForEach-Object {
-				Write-Verbose $_
-			}
-			Write-Verbose "Displaying ParameterSets"
-			$PsCmdlet.ParameterSetName | ForEach-Object	{
-				Write-Verbose "[ParameterSetName, $_]"
-			}
-		}
 		$listLoggerProviders = New-Object System.Collections.ArrayList
 		switch ($Severity) {
 			Verbose {
@@ -113,13 +97,11 @@
 		}
 
 		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
-
 		}
 
 	}
 
 	Process {
-		Write-Debug "[PROCESS]"
 		foreach ($itemLogProvider in $LoggerProvider) {
 			try {
 				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteLog))) {
@@ -136,16 +118,5 @@
 	}
 
 	End {
-		Write-Debug "[END]"
-		If ($listLoggerProviders.Count -gt 0) {
-			Write-Debug "LoggerProviders Count: $($listLoggerProviders.count)"
-			Write-Debug "LoggerProvider"
-			foreach ($itemLogProvider in $listLoggerProviders) {
-				Write-Debug "LoggerProvider $($itemLogProvider)"
-			}
-		}
-		Else {
-			Write-Debug "No LoggerProvider"
-		}
 	}
 }
