@@ -1,208 +1,120 @@
-
+﻿
 Function Write-PSLogException {
-<#
+	<#
+	.SYNOPSIS
+		Log exception message.
 
-.SYNOPSIS
+	.DESCRIPTION
+		Log the exception with additional data through logger provider.
 
-Log exception message.
+	.PARAMETER LoggerProvider
+		The object being piped into New-PSLogLogger or applied via the parameter.
 
-.DESCRIPTION
+	.PARAMETER Message
+		Log exception message
 
-Log the exception with additional data through logger provider.
+	.PARAMETER AdditionalData
+		Additional data for exception message
 
-.PARAMETER LoggerProvider
+	.PARAMETER WhatIf
+        Enables the function to simulate what it will do instead of actually executing.
 
-The object being piped into New-PSLogLogger or applied via the parameter.
+    .PARAMETER Confirm
+        The Confirm switch instructs the command to which it is applied to stop processing before any changes are made.
+        The command then prompts you to acknowledge each action before it continues.
+        When you use the Confirm switch, you can step through changes to objects to make sure that changes are made only to the specific objects that you want to change.
+        This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell.
+        A confirmation prompt is displayed for each object before the Shell modifies the object.
 
-.PARAMETER Message
+	.INPUTS
+		Isystem.Infrastructure.Core.ILogger[]]. Pipe objects.
 
-Log exception message
+	.OUTPUTS
+		None.
 
-.PARAMETER AdditionalData
+	.EXAMPLE
+		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -Verbose -Debug
+		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
+		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
+		$listLogger | Write-PSLogException 'Test exception message'  -Verbose -Debug
 
-Additional data for exception message
+	.EXAMPLE
+		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
+		Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message'
 
-.NOTES
-
-Name: Write-PSLogException
-
-Author: Ondrej Kracmar
-
-.INPUTS
-
-Isystem.Infrastructure.Core.ILogger[]]. Pipe objects.
-
-.OUTPUTS
-
-None.
-
-.EXAMPLE
-		
-$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -Verbose -Debug
-
-$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
-	
-$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		
-$listLogger | Write-PSLogException 'Test exception message'  -Verbose -Debug
-		
-.EXAMPLE
-
-$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-
-Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message'
-
-.EXAMPLE
-
-$additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
-$additionalData.Add("Description1", "Value1")
-$additionalData.Add("Description2", "Value2")
-$additionalData.Add("Description3", "Value3")
-
-Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message' -AdditionalData $additionalData
-
-.LINK
-
-http://www.i-system.cz
-
+	.EXAMPLE
+		$additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
+		$additionalData.Add("Description1", "Value1")
+		$additionalData.Add("Description2", "Value2")
+		$additionalData.Add("Description3", "Value3")
+	Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message' -AdditionalData $additionalData
 #>
-    [cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
-
-    Param (
-        [parameter(Mandatory = $True,
-
-			ParameterSetName = 'Message',
-
-			ValueFromPipeline=$True
-		)]
-
+	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
+	Param (
+		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]
 		[ValidateNotNullOrEmpty()]
-
-        [Isystem.Infrastructure.Core.ILogger[]]$LoggerProvider,
-
-
-		[parameter(Mandatory = $True,
-
-			ParameterSetName = 'Message',
-
-			Position = 0
-		)]
-
+		[Isystem.Infrastructure.Core.ILogger[]]$LoggerProvider,
+		[parameter(Mandatory = $True, Position = 0, ParameterSetName = 'Message')]
 		[ValidateNotNullOrEmpty()]
-
 		[string]$Message,
+		[parameter(Mandatory = $False, Position = 1, ParameterSetName = 'Message')]
+		[System.Collections.Generic.Dictionary[String, String]]$AdditionalData
+	)
 
-		[parameter(Mandatory = $False,
-
-			ParameterSetName = 'Message',
-
-			Position = 1
-		)]
-
-		[System.Collections.Generic.Dictionary[String,String]]$AdditionalData
-
-		)
-
-	
-    Begin {
-
-        If ($PSBoundParameters['Debug']) {
-
-            $DebugPreference = 'Continue'
-
-        }
-
-        Write-Debug "[BEGIN]"
-
+	Begin {
+		If ($PSBoundParameters['Debug']) {
+			$DebugPreference = 'Continue'
+		}
+		Write-Debug "[BEGIN]"
 		$resolveOvfTestParameterSetNames = 'Message'
 
-        If ($PSBoundParameters.ContainsKey('Verbose'))
-		{
-
-            Write-Verbose "Displaying PSBoundParameters"
-
-            $PSBoundParameters.GetEnumerator() | ForEach-Object {
-
-                Write-Verbose $_
-
-            }
-
+		If ($PSBoundParameters.ContainsKey('Verbose')) {
+			Write-Verbose "Displaying PSBoundParameters"
+			$PSBoundParameters.GetEnumerator() | ForEach-Object {
+				Write-Verbose $_
+			}
 			Write-Verbose "Displaying ParameterSets"
-
 			$PsCmdlet.ParameterSetName | ForEach-Object	{
-
 				Write-Verbose "[ParameterSetName, $_]"
-
 			}
-
-        }
-
-        $listLoggerProviders = New-Object System.Collections.ArrayList
-
-
-        If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
-
-         
-        }
-
-    }
-
-    Process {
-
-        Write-Debug "[PROCESS]"
-
-		foreach($itemLogProvider in $LoggerProvider)
-		{
-
-			try 
-			{
-
-				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, $LocalizedData.LoggerProvider_WriteLog))
-				{
-
-					$itemLogProvider.LogException($Message, $AdditionalData)
-					[void]$listLoggerProviders.Add($itemLogProvider)
-
-				}
-			}
-
-			Catch
-			{
-			}
-
-			finally
-			{
-
-			}
-		}		
-    }
-
-    End {
-
-        Write-Debug "[END]"
-
-        If ($listLoggerProviders.Count -gt 0) {
-
-			Write-Debug "LoggerProviders Count: $($listLoggerProviders.count)"
-
-            Write-Debug "LoggerProvider"
-
-			foreach($itemLogProvider in $listLoggerProviders)
-			{
-
-				Write-Debug "LoggerProvider $($itemLogProvider)"
-
-			}
-
 		}
 
-        Else 
-		{
+		$listLoggerProviders = New-Object System.Collections.ArrayList
 
-            Write-Debug "No LoggerProvider"
+		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
 
 		}
-    
 	}
 
+	Process {
+		Write-Debug "[PROCESS]"
+		foreach ($itemLogProvider in $LoggerProvider) {
+			try {
+				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteException))) {
+					$itemLogProvider.LogException($Message, $AdditionalData)
+					[void]$listLoggerProviders.Add($itemLogProvider)
+				}
+			}
+			Catch {
+			}
+
+			finally {
+
+			}
+		}
+	}
+
+	End {
+		Write-Debug "[END]"
+		If ($listLoggerProviders.Count -gt 0) {
+			Write-Debug "LoggerProviders Count: $($listLoggerProviders.count)"
+			Write-Debug "LoggerProvider"
+			foreach ($itemLogProvider in $listLoggerProviders) {
+				Write-Debug "LoggerProvider $($itemLogProvider)"
+			}
+		}
+		Else {
+			Write-Debug "No LoggerProvider"
+		}
+	}
 }

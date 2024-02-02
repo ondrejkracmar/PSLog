@@ -1,20 +1,62 @@
-﻿pool:
-  vmImage: "windows-latest"
+﻿name: Publish Powershell Module To Private Repository
+trigger:
+  - main
+
+variables:
+  - group: "AzArtifactsPSModules"
+
 steps:
-- task: PowerShell@2
-  displayName: Prerequisites
-  inputs:
-    targetType: filePath
-    filePath: './build/vsts-prerequisites.ps1'
+   - checkout: self
+     persistCredentials: true
 
-- task: PowerShell@2
-  displayName: Validate
-  inputs:
-    targetType: filePath
-    filePath: './build/vsts-validate.ps1'
+   - task: PowerShell@2
+     displayName: Install Prerequisites For Validation
+     inputs:
+       targetType: filePath
+       filePath: "./src//build/vsts-prerequisites.ps1"
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/TEST-*.xml'
-  inputs:
-    testResultsFormat: NUnit
-  condition: always()
+   - task: PowerShell@2
+     displayName: Validation/Test Powershell Module
+     inputs:
+       targetType: filePath
+       filePath: "./src/build/vsts-validate.ps1"
+
+   - task: PublishTestResults@2
+     displayName: "Publish Test Results **/TEST-*.xml"
+     inputs:
+       testResultsFormat: NUnit
+     condition: always()
+  
+   - task: PowerShell@2
+     displayName: Generate documentation
+     inputs:
+       targetType: filePath
+       filePath: "./src/build/vsts-document.ps1"
+
+   - task: PowerShell@2
+     displayName: Build Nuget For Powerhell module
+     inputs:
+       targetType: filePath
+       filePath: "./src/build/vsts-build.ps1"
+       arguments: > # Use this to avoid newline characters in multiline string
+          -WorkingDirectory "./src"
+          -LocalRepo
+
+   - task: PowerShell@2
+     displayName: Publish Powershell Module/Nuget To Private Azure Artifact/Powershell Reposityr
+     inputs:
+        targetType: inline
+        script: |
+          $source = 'https://pkgs.dev.azure.com/{0}/{1}/_packaging/{2}/nuget/v2' -f '$(company)', '$(project)', '$(feedName)'
+          Invoke-Expression "nuget source add -Name '$(feedName)' -Source '$($source)' -username '$(userName)' -password '$(PAT)'"
+          Invoke-Expression "nuget push -Source '$(feedName)' -ApiKey ((New-Guid).Guid)  'PSLog.1.1.0.1.nupkg' -SkipDuplicate"
+
+   - powershell: |
+      git config --local user.email '$(userName)'
+      git config --local user.name "Azure Pipelines"
+      git add *.md
+      git commit -m "Generate documentation"
+      git push origin HEAD:$(Build.SourceBranchName)
+     displayName: 'Commit and Push updated markdown files for module'
+     env:
+      SYSTEM_ACCESSTOKEN: '$(PAT)'

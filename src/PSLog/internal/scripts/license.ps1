@@ -1,5 +1,5 @@
-﻿New-PSFLicense -Product 'PSLog' -Manufacturer 'KracmarOndrej' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.0.0.0" -Date (Get-Date "2024-02-02") -Text @"
-Copyright (c) 2024 KracmarOndrej
+﻿New-PSFLicense -Product 'PSLog' -Manufacturer 'Ondrej Kracmar' -ProductVersion $script:ModuleVersion -ProductType Module -Name MIT -Version "1.1.0.1" -Date (Get-Date "2024-02-02") -Text @"
+Copyright (c) 2024 Ondrej Kracmar
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

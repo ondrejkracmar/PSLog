@@ -3,13 +3,13 @@
 	RootModule = 'PSLog.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '1.0.0.0'
+	ModuleVersion = '1.1.0.1'
 	
 	# ID used to uniquely identify this module
 	GUID = '40c72dd5-c629-4d26-9d8d-7bf1eda888f7'
 	
 	# Author of this module
-	Author = 'KracmarOndrej'
+	Author = 'Ondrej Kracmar'
 	
 	# Company or vendor of this module
 	CompanyName = 'MyCompany'
@@ -39,7 +39,17 @@
 	# FormatsToProcess = @('xml\PSLog.Format.ps1xml')
 	
 	# Functions to export from this module
-	FunctionsToExport = ''
+	FunctionsToExport = @(
+		'New-PSLogLogger'
+		'Write-PSLogCritical'
+		'Write-PSLogError'
+		'Write-PSLogException'
+		'Write-PSLogInfo'
+		'Write-PSLogInfo'
+		'Write-PSLogMessage'
+		'Write-PSLogVerbose'
+		'Write-PSLogWarning'
+	)
 	
 	# Cmdlets to export from this module
 	CmdletsToExport = ''
@@ -63,7 +73,8 @@
 		PSData = @{
 			
 			# Tags applied to this module. These help with module discovery in online galleries.
-			# Tags = @()
+			Tags                       = @('Log', 'LogProvider')
+			ExternalModuleDependencies = @('PSFramework')
 			
 			# A URL to the license for this module.
 			# LicenseUri = ''
