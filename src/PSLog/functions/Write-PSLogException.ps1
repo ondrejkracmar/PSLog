@@ -44,6 +44,8 @@ Function Write-PSLogException {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		Write-PSLogException -LoggerProvider $listPSLogProvider -Message 'Test exception message'
 
+		Write exception message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
@@ -53,6 +55,8 @@ Function Write-PSLogException {
 		PS C:\> $additionalData.Add("Description2", "Value2")
 		PS C:\> $additionalData.Add("Description3", "Value3")
 		PS C:\> Write-PSLogException -LoggerProvider $listPSLogProvider -Message 'Test exception message' -AdditionalData $additionalData
+
+		Write exception message
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (

@@ -36,10 +36,14 @@ Function Write-PSLogInfo {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\>	$listPSLogProvider | Write-PSLogInfo 'Test log message'
 
+		Write log message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		Write-PSLogInfo -LoggerProvider $listPSLogProvider -Message 'Test log message'
+
+		Write log message
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (

@@ -35,11 +35,15 @@ Function Write-PSLogError {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\> $listPSLogProvider | Write-PSLogError 'Test log error message'
 
+		Write ereor message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		Write-PSLogError -LoggerProvider $listPSLogProvider -Message 'Test log error message'
-#>
+
+		Write ereor message
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ParameterSetName = 'Message', ValueFromPipeline = $True)]

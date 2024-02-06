@@ -43,10 +43,14 @@
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\> $listPSLogProvider | Write-PSLogMessage 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Error
 
+		Write message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		PS C:\> Write-PSLogMessage -LoggerProvider $listPSLogProvider -Message 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Info
+
+		Write message
 
 	.EXAMPLE
 		
@@ -58,7 +62,9 @@
 		PS C:\> $additionalData.Add("Description2", "Value2")
 		PS C:\> $additionalData.Add("Description3", "Value3")
 		PS C:\> Write-PSLogMessage -LoggerProvider $listPSLogProvider -Message 'Test log message with additinal data' -AdditionalData $additionalData -Severity [Isystem.Infrastructure.Core.Severity]::Warning
-#>
+
+		Write message
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]

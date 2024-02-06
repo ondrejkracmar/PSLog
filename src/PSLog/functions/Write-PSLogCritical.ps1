@@ -36,11 +36,15 @@ Function Write-PSLogCritical {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\> $listPSLogProvider | Write-PSLogCritical 'Test critical message'
 
+		Write crtical message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		PS C:\> Write-PSLogCritical -LoggerProvider $listPSLogProvider -Message 'Test critical message'
-#>
+
+		Write crtical message
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]
