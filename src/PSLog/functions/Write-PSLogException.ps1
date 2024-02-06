@@ -57,7 +57,7 @@ Function Write-PSLogException {
 		PS C:\> Write-PSLogException -LoggerProvider $listPSLogProvider -Message 'Test exception message' -AdditionalData $additionalData
 
 		Write exception message
-#>
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]
