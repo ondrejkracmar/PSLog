@@ -36,11 +36,16 @@ Function Write-PSLogVerbose {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\> $listPSLogProvider | Write-PSLogVerbose 'Test verbose message'
 
+		Write verbose message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
 		PS C:\> Write-PSLogVerbose -LoggerProvider $listPSLogProvider -Message 'Test verbose message'
-#>
+
+		Write verbose message
+
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]

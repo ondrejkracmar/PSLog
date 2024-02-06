@@ -44,7 +44,8 @@ Function Write-PSLogInfo {
 		Write-PSLogInfo -LoggerProvider $listPSLogProvider -Message 'Test log message'
 
 		Write log message
-#>
+
+	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]

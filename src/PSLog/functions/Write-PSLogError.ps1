@@ -43,6 +43,7 @@ Function Write-PSLogError {
 		Write-PSLogError -LoggerProvider $listPSLogProvider -Message 'Test log error message'
 
 		Write ereor message
+
 	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (

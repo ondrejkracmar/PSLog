@@ -44,6 +44,7 @@ Function Write-PSLogCritical {
 		PS C:\> Write-PSLogCritical -LoggerProvider $listPSLogProvider -Message 'Test critical message'
 
 		Write crtical message
+
 	#>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
