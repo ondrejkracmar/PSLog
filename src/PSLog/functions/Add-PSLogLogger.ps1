@@ -29,10 +29,14 @@
 	.EXAMPLE
 		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 
+		Add one PSLogLogger
+
 	.EXAMPLE
 		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
 		PS C:\> $additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
 		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
+
+		Add several PSLogLogger to list
 
 	.EXAMPLE
 		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
@@ -59,7 +63,10 @@
 			}
 			"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
 		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-	\#>
+
+		Add PSLogLogger to List
+
+		#>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
 	[cmdletbinding(SupportsShouldProcess = $true)]
 	Param (
