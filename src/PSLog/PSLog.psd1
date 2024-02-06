@@ -47,7 +47,6 @@
 		'Write-PSLogError'
 		'Write-PSLogException'
 		'Write-PSLogInfo'
-		'Write-PSLogInfo'
 		'Write-PSLogMessage'
 		'Write-PSLogVerbose'
 		'Write-PSLogWarning'
