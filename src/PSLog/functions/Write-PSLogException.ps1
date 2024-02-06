@@ -39,6 +39,8 @@ Function Write-PSLogException {
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
 		PS C:\> [void]$listPSLogProvider | Write-PSLogException 'Test exception message'
 
+		Write exception message
+
 	.EXAMPLE
 		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
 		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
