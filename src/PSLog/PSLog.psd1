@@ -3,7 +3,7 @@
 	RootModule = 'PSLog.psm1'
 	
 	# Version number of this module.
-	ModuleVersion = '1.1.0.1'
+	ModuleVersion = '1.1.0.2'
 	
 	# ID used to uniquely identify this module
 	GUID = '40c72dd5-c629-4d26-9d8d-7bf1eda888f7'
@@ -26,11 +26,13 @@
 	# Modules that must be imported into the global environment prior to importing
 	# this module
 	RequiredModules = @(
-		@{ ModuleName='PSFramework'; ModuleVersion='1.7.270' }
+		@{ ModuleName='PSFramework'}
 	)
 	
 	# Assemblies that must be loaded prior to importing this module
-	# RequiredAssemblies = @('bin\PSLog.dll')
+	RequiredAssemblies = @('bin\BouncyCastle.Crypto.dll','bin\Isystem.Infrastructure.Core.dll','bin\Isystem.Infrastructure.Logging.ApplicationInsights.dll','bin\Isystem.Infrastructure.Logging.dll'
+'bin\Isystem.Infrastructure.Logging.Email.dll','bin\Isystem.Infrastructure.Services.dll','bin\Isystem.Infrastructure.Services.Mailing.dll',
+'bin\MailKit.dll','bin\Microsoft.ApplicationInsights.dll','bin\MimeKit.dll','bin\System.Diagnostics.DiagnosticSource.dll','bin\System.Threading.Thread.dll')
 	
 	# Type files (.ps1xml) to be loaded when importing this module
 	# TypesToProcess = @('xml\PSLog.Types.ps1xml')

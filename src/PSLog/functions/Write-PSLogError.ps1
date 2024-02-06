@@ -29,10 +29,10 @@ Function Write-PSLogError {
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -Verbose -Debug
+		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
 		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogError 'Test log error message'  -Verbose -Debug
+		$listLogger | Write-PSLogError 'Test log error message'
 
 	.EXAMPLE
 		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
@@ -49,7 +49,6 @@ Function Write-PSLogError {
 	)
 
 	Begin {
-		$resolveOvfTestParameterSetNames = 'Message'
 		$listLoggerProviders = [System.Collections.ArrayList]::new()
 	}
 

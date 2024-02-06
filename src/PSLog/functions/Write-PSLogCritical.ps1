@@ -30,10 +30,10 @@ Function Write-PSLogCritical {
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -Verbose -Debug
+		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
 		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogCritical 'Test critical message'  -Verbose -Debug
+		$listLogger | Write-PSLogCritical 'Test critical message'
 
 	.EXAMPLE
 		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
@@ -50,7 +50,6 @@ Function Write-PSLogCritical {
 	)
 
 	Begin {
-		$resolveOvfTestParameterSetNames = 'Message'
 		$listLoggerProviders = New-Object System.Collections.ArrayList
 		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
 		}

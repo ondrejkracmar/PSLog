@@ -10,7 +10,7 @@
 		DateTiime provider type FixedTimeZoneDateTimeProvider', 'LocalDateTimeProvider', 'MockDateTimeProvider', 'UtcDateTimeProvider'
 
 	.PARAMETER LoggerProvider
-		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger
+		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
 
 	.PARAMETER WhatIf
         Enables the function to simulate what it will do instead of actually executing.
@@ -23,7 +23,7 @@
         A confirmation prompt is displayed for each object before the Shell modifies the object.
 
 	.EXAMPLE
-		$PSLogger = New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -Verbose -Debug
+		$PSLogger = New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 
 	.EXAMPLE
 		[System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
@@ -63,10 +63,10 @@
 	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet('FixedTimeZoneDateTimeProvider', 'LocalDateTimeProvider', 'MockDateTimeProvider', 'UtcDateTimeProvider')]
-		[string]$DateTimeNowProvider = 'LocalDateTimeProvider',
+		[string]$DateTimeNowProvider,
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
-		[string]$LoggerProvider = 'ConsoleLoggerProvider'
+		[string]$LoggerProvider
 	)
 
 	DynamicParam {
