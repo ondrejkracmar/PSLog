@@ -11,6 +11,9 @@
 
 	.PARAMETER LoggerProvider
 		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
+	
+	.PARAMETER AdditionalsProvider
+		Add additiobal data provider
 
 	.PARAMETER EnableException
         This parameters disables group-friendly warnings and enables the throwing of exceptions. This is less group frien
@@ -76,7 +79,9 @@
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
 		[string]$LoggerProvider,
-        [switch]$EnableException
+		[Parameter(Position = 2)]
+		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalsProvider,
+		[switch]$EnableException
 	)
 
 	DynamicParam {
@@ -122,16 +127,13 @@
 					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProviders
 				}
 				TextFileLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider,
-					$AdditionalDataProviders
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
 				}
 				ApplicationInsightsLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings,
-					$dateTimeProvider, $AdditionalDataProviders
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings, $dateTimeProvider, $AdditionalDataProvider
 				}
 				EmailLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService
-					$dateTimeProvider, $AdditionalDataProviders
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService $dateTimeProvider, $AdditionalDataProvider
 				}
 				Default {
 
