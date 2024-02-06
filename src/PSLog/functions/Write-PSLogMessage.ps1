@@ -7,7 +7,7 @@
 		Log message with additinal data through logger provider.
 
 	.PARAMETER LoggerProvider
-		The object being piped into New-PSLogLogger or applied via the parameter.
+		The object being piped into Add-PSLogLogger or applied via the parameter.
 
 	.PARAMETER Message
 		Log exception message
@@ -19,7 +19,7 @@
 		Severity type [Isystem.Infrastructure.Core.Severity]::Info, [Isystem.Infrastructure.Core.Severity]::Warning, [Isystem.Infrastructure.Core.Severity]::Error,
 		[Isystem.Infrastructure.Core.Severity]::Exception, [Isystem.Infrastructure.Core.Severity]::Critical, [Isystem.Infrastructure.Core.Severity]::Verbose
 		Default value [Isystem.Infrastructure.Core.Severity]::Info
-	
+
 	.PARAMETER WhatIf
         Enables the function to simulate what it will do instead of actually executing.
 
@@ -37,21 +37,27 @@
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogMessage 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Error
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
+		PS C:\> $listPSLogProvider | Write-PSLogMessage 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Error
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		Write-PSLogMessage -LoggerProvider $listLogger -Message 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Info
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> Write-PSLogMessage -LoggerProvider $listPSLogProvider -Message 'Test log message with additinal data' -Severity [Isystem.Infrastructure.Core.Severity]::Info
 
 	.EXAMPLE
-		$additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
-		$additionalData.Add("Description1", "Value1")
-		$additionalData.Add("Description2", "Value2")
-		$additionalData.Add("Description3", "Value3")
-		Write-PSLogMessage -LoggerProvider $listLogger -Message 'Test log message with additinal data' -AdditionalData $additionalData -Severity [Isystem.Infrastructure.Core.Severity]::Warning
+		
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> $additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
+		PS C:\> $additionalData.Add("Description1", "Value1")
+		PS C:\> $additionalData.Add("Description2", "Value2")
+		PS C:\> $additionalData.Add("Description3", "Value3")
+		PS C:\> Write-PSLogMessage -LoggerProvider $listPSLogProvider -Message 'Test log message with additinal data' -AdditionalData $additionalData -Severity [Isystem.Infrastructure.Core.Severity]::Warning
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
@@ -95,24 +101,13 @@
 
 			}
 		}
-
-		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
-		}
-
 	}
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			try {
-				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteLog))) {
-					$itemLogProvider.LogMessage($Message, $AdditionalData, $severityEnum )
-					[void]$listLoggerProviders.Add($itemLogProvider)
-
-				}
-			}
-			Catch {
-			}
-			finally {
+			if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteLog))) {
+				$itemLogProvider.LogMessage($Message, $AdditionalData, $severityEnum )
+				[void]$listLoggerProviders.Add($itemLogProvider)
 			}
 		}
 	}

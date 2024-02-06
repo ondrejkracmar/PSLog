@@ -8,7 +8,7 @@ Function Write-PSLogCritical {
 		Write log critical mesage through logger provider.
 
 	.PARAMETER LoggerProvider
-		The object being piped into New-PSLogLogger or applied via the parameter.
+		The object being piped into Add-PSLogLogger or applied via the parameter.
 
 	.PARAMETER Message
 		Log critical message
@@ -30,14 +30,16 @@ Function Write-PSLogCritical {
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogCritical 'Test critical message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
+		PS C:\> $listPSLogProvider | Write-PSLogCritical 'Test critical message'
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		Write-PSLogCritical -LoggerProvider $listLogger -Message 'Test critical message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> Write-PSLogCritical -LoggerProvider $listPSLogProvider -Message 'Test critical message'
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
@@ -50,29 +52,19 @@ Function Write-PSLogCritical {
 	)
 
 	Begin {
-		$listLoggerProviders = New-Object System.Collections.ArrayList
-		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
-		}
 
 	}
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			try {
-				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteCritical))) {
-					$itemLogProvider.LogCritical($Message)
-					[void]$listLoggerProviders.Add($itemLogProvider)
-
-				}
-			}
-			Catch {
-			}
-			finally {
+			if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteCritical))) {
+				$itemLogProvider.LogCritical($Message)
+				[void]$listLoggerProviders.Add($itemLogProvider)
 			}
 		}
 	}
 
 	End {
-		
+
 	}
 }

@@ -7,7 +7,7 @@ Function Write-PSLogError {
 		Write log error mesage through logger provider.
 
 	.PARAMETER LoggerProvider
-		The object being piped into New-PSLogLogger or applied via the parameter.
+		The object being piped into Add-PSLogLogger or applied via the parameter.
 
 	.PARAMETER Message
 		Log error message
@@ -29,14 +29,16 @@ Function Write-PSLogError {
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogError 'Test log error message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
+		PS C:\> $listPSLogProvider | Write-PSLogError 'Test log error message'
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		Write-PSLogError -LoggerProvider $listLogger -Message 'Test log error message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		Write-PSLogError -LoggerProvider $listPSLogProvider -Message 'Test log error message'
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
@@ -49,21 +51,13 @@ Function Write-PSLogError {
 	)
 
 	Begin {
-		$listLoggerProviders = [System.Collections.ArrayList]::new()
+
 	}
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			try {
-				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteLog))) {
-					$itemLogProvider.LogError($Message)
-					[void]$listLoggerProviders.Add($itemLogProvider)
-
-				}
-			}
-			Catch {
-			}
-			finally {
+			if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteLog))) {
+				$itemLogProvider.LogError($Message)
 			}
 		}
 	}

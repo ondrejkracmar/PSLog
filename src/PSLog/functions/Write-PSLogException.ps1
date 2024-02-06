@@ -8,7 +8,7 @@ Function Write-PSLogException {
 		Log the exception with additional data through logger provider.
 
 	.PARAMETER LoggerProvider
-		The object being piped into New-PSLogLogger or applied via the parameter.
+		The object being piped into Add-PSLogLogger or applied via the parameter.
 
 	.PARAMETER Message
 		Log exception message
@@ -33,21 +33,26 @@ Function Write-PSLogException {
 		None.
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		$listLogger += New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-		$listLogger | Write-PSLogException 'Test exception message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders))
+		PS C:\> [void]$listPSLogProvider | Write-PSLogException 'Test exception message'
 
 	.EXAMPLE
-		$listLogger += New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
-		Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message'
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		Write-PSLogException -LoggerProvider $listPSLogProvider -Message 'Test exception message'
 
 	.EXAMPLE
-		$additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
-		$additionalData.Add("Description1", "Value1")
-		$additionalData.Add("Description2", "Value2")
-		$additionalData.Add("Description3", "Value3")
-	Write-PSLogException -LoggerProvider $listLogger -Message 'Test exception message' -AdditionalData $additionalData
+		PS C:\> $listPSLogProvider = [System.Collections.ArrayList]::new()
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger))
+		PS C:\> [void]$listPSLogProvider.Add((Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders))
+		PS C:\> $additionalData = New-Object 'System.Collections.Generic.Dictionary[String,String]'
+		PS C:\> $additionalData.Add("Description1", "Value1")
+		PS C:\> $additionalData.Add("Description2", "Value2")
+		PS C:\> $additionalData.Add("Description3", "Value3")
+		PS C:\> Write-PSLogException -LoggerProvider $listPSLogProvider -Message 'Test exception message' -AdditionalData $additionalData
 #>
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 	Param (
@@ -62,22 +67,13 @@ Function Write-PSLogException {
 	)
 
 	Begin {
-		$listLoggerProviders = New-Object System.Collections.ArrayList
+
 	}
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			try {
-				if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteException))) {
-					$itemLogProvider.LogException($Message, $AdditionalData)
-					[void]$listLoggerProviders.Add($itemLogProvider)
-				}
-			}
-			Catch {
-			}
-
-			finally {
-
+			if ($PSCmdlet.ShouldProcess(($itemLogProvider.GetType()).name, (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerProvider.WriteException))) {
+				$itemLogProvider.LogException($Message, $AdditionalData)
 			}
 		}
 	}

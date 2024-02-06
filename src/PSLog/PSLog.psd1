@@ -12,7 +12,7 @@
 	Author = 'Ondrej Kracmar'
 	
 	# Company or vendor of this module
-	CompanyName = 'MyCompany'
+	CompanyName = 'i-system'
 	
 	# Copyright statement for this module
 	Copyright = 'Copyright (c) 2024 KracmarOndrej'
@@ -42,7 +42,7 @@
 	
 	# Functions to export from this module
 	FunctionsToExport = @(
-		'New-PSLogLogger'
+		'Add-PSLogLogger'
 		'Write-PSLogCritical'
 		'Write-PSLogError'
 		'Write-PSLogException'

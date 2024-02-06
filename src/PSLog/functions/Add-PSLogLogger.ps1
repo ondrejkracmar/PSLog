@@ -1,4 +1,4 @@
-﻿Function New-PSLogLogger {
+﻿Function Add-PSLogLogger {
 	<#
 	.SYNOPSIS
 		Create a new instance of PSLogger Provider.
@@ -12,6 +12,10 @@
 	.PARAMETER LoggerProvider
 		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
 
+	.PARAMETER EnableException
+        This parameters disables group-friendly warnings and enables the throwing of exceptions. This is less group frien
+        dly, but allows catching exceptions in calling scripts.
+
 	.PARAMETER WhatIf
         Enables the function to simulate what it will do instead of actually executing.
 
@@ -23,12 +27,12 @@
         A confirmation prompt is displayed for each object before the Shell modifies the object.
 
 	.EXAMPLE
-		$PSLogger = New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
+		$PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 
 	.EXAMPLE
 		[System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
 		$additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		$PSLogger = New-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
+		$PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
 
 	.EXAMPLE
 		[System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
@@ -55,18 +59,18 @@
 			}
 		}
 		"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
-		$PSLogger = New-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
+		$PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
 #>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
-	[cmdletbinding(
-	)]
+	[cmdletbinding(SupportsShouldProcess = $true)]
 	Param (
 		[Parameter(Mandatory = $true, Position = 0)]
 		[ValidateSet('FixedTimeZoneDateTimeProvider', 'LocalDateTimeProvider', 'MockDateTimeProvider', 'UtcDateTimeProvider')]
 		[string]$DateTimeNowProvider,
 		[Parameter(Mandatory = $true, Position = 1)]
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
-		[string]$LoggerProvider
+		[string]$LoggerProvider,
+        [switch]$EnableException
 	)
 
 	DynamicParam {
@@ -106,29 +110,33 @@
 	}
 
 	Process {
-		switch ($LoggerProvider) {
-			ConsoleLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProviders
-			}
-			TextFileLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider,
-				$AdditionalDataProviders
-			}
-			ApplicationInsightsLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings,
-				$dateTimeProvider, $AdditionalDataProviders
-			}
-			EmailLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService
-				$dateTimeProvider, $AdditionalDataProviders
-			}
-			Default {
+		Invoke-PSFProtectedCommand -ActionString 'LoggerProvider.New' -ActionStringValues $LoggerProvider -Target (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerSubsystem.Name) -ScriptBlock {
+			switch ($LoggerProvider) {
+				ConsoleLogger {
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProviders
+				}
+				TextFileLogger {
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider,
+					$AdditionalDataProviders
+				}
+				ApplicationInsightsLogger {
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings,
+					$dateTimeProvider, $AdditionalDataProviders
+				}
+				EmailLogger {
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService
+					$dateTimeProvider, $AdditionalDataProviders
+				}
+				Default {
 
+				}
 			}
-		}
+			$loggerProvider
+		} -EnableException $EnableException -PSCmdlet $PSCmdlet
+		if (Test-PSFFunctionInterrupt) { return }
 	}
 
 	End {
-		$loggerProvider
+
 	}
 }
