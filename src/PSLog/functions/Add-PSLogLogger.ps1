@@ -27,40 +27,39 @@
         A confirmation prompt is displayed for each object before the Shell modifies the object.
 
 	.EXAMPLE
-		$PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 
 	.EXAMPLE
-		[System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		$additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		$PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
+		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
+		PS C:\> $additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
 
 	.EXAMPLE
-		[System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		$additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-
-		Add-Type @"
-		using Isystem.Infrastructure.Logging;
-		namespace PSLog
-		{
-			public class ApplicationInsightsSettings:IApplicationInsightsSettings
+		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
+		PS C:\> $additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
+		PS C:\> Add-Type @"
+			using Isystem.Infrastructure.Logging;
+			namespace PSLog
 			{
-				private string instrumentationKey;
-				public ApplicationInsightsSettings()
+				public class ApplicationInsightsSettings:IApplicationInsightsSettings
 				{
-					instrumentationKey = "af58ca0c-7b50-4fec-ad6d-aac319ae7a5f";
-				}
+					private string instrumentationKey;
+					public ApplicationInsightsSettings()
+					{
+						instrumentationKey = "af58ca0c-7b50-4fec-ad6d-aac319ae7a5f";
+					}
 
-				public string InstrumentationKey
-				{
-					get{
-						return instrumentationKey;
+					public string InstrumentationKey
+					{
+						get{
+							return instrumentationKey;
+						}
 					}
 				}
 			}
-		}
-		"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
-		$PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
-#>
+			"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
+	\#>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
 	[cmdletbinding(SupportsShouldProcess = $true)]
 	Param (
