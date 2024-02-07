@@ -69,7 +69,7 @@
 
 		Add PSLogLogger to List
 
-		#>
+	#>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
 	[cmdletbinding(SupportsShouldProcess = $true)]
 	Param (
