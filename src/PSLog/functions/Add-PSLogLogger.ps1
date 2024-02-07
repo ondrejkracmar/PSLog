@@ -29,6 +29,7 @@
         This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell.
         A confirmation prompt is displayed for each object before the Shell modifies the object.
 
+
 	.EXAMPLE
 		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger
 
