@@ -35,41 +35,6 @@
 
 		Add one PSLogLogger
 
-	.EXAMPLE
-		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$AdditionalDataProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		PS C:\> $AdditionalDataProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProvider $AdditionalDataProvider
-
-		Add several PSLogLogger to list
-
-	.EXAMPLE
-		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$AdditionalDataProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		PS C:\> $AdditionalDataProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		PS C:\> Add-Type @"
-			using Isystem.Infrastructure.Logging;
-			namespace PSLog
-			{
-				public class ApplicationInsightsSettings:IApplicationInsightsSettings
-				{
-					private string instrumentationKey;
-					public ApplicationInsightsSettings()
-					{
-						instrumentationKey = "af58ca0c-7b50-4fec-ad6d-aac319ae7a5f";
-					}
-
-					public string InstrumentationKey
-					{
-						get{
-							return instrumentationKey;
-						}
-					}
-				}
-			}
-			"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProvider $AdditionalDataProvider
-
-		Add PSLogLogger to List
-
 	#>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
 	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'LoggerProvider')]
