@@ -12,7 +12,7 @@
 	.PARAMETER LoggerProvider
 		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
 	
-	.PARAMETER AdditionalsProvider
+	.PARAMETER AdditionalDataProvider
 		Add additiobal data provider
 
 	.PARAMETER EnableException
@@ -35,15 +35,15 @@
 		Add one PSLogLogger
 
 	.EXAMPLE
-		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		PS C:\> $additionalsProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProvider $additionalsProvider
+		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$AdditionalDataProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
+		PS C:\> $AdditionalDataProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProvider $AdditionalDataProvider
 
 		Add several PSLogLogger to list
 
 	.EXAMPLE
-		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
-		PS C:\> $additionalsProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
+		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$AdditionalDataProvider = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
+		PS C:\> $AdditionalDataProvider.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
 		PS C:\> Add-Type @"
 			using Isystem.Infrastructure.Logging;
 			namespace PSLog
@@ -65,7 +65,7 @@
 				}
 			}
 			"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProvider $additionalsProvider
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProvider $AdditionalDataProvider
 
 		Add PSLogLogger to List
 
@@ -80,7 +80,7 @@
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
 		[string]$LoggerProvider,
 		[Parameter(Position = 2)]
-		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalsProvider,
+		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalDataProvider,
 		[switch]$EnableException
 	)
 
