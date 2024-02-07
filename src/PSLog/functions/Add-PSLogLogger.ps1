@@ -122,7 +122,6 @@
 	}
 
 	Process {
-		$test = $AdditionalDataProvider
 		switch ($LoggerProvider) {
 			ConsoleLogger {
 				[Isystem.Infrastructure.Core.ILogger]$logger = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider

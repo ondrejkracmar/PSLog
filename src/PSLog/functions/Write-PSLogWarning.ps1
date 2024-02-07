@@ -49,18 +49,16 @@ Function Write-PSLogWarning {
 	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
 
 	Param (
-		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]
+		[parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Message')]
 		[ValidateNotNullOrEmpty()]
 		[Isystem.Infrastructure.Core.ILogger[]]$LoggerProvider,
-		[parameter(Mandatory = $True, Position = 0, ParameterSetName = 'Message')]
+		[parameter(Mandatory = $true, Position = 0, ParameterSetName = 'Message')]
 		[ValidateNotNullOrEmpty()]
 		[string]$Message
 	)
 
 	Begin {
 		$listLoggerProviders = New-Object System.Collections.ArrayList
-		If ($PSBoundParameters.ContainsKey('LoggerProvider')) {
-		}
 	}
 
 	Process {
