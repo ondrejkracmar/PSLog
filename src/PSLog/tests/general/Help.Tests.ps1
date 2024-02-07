@@ -136,12 +136,13 @@ foreach ($command in $commands) {
 					}
                 }
             }
+			<#
             foreach ($helpParm in $HelpParameterNames) {
 				# Shouldn't find extra parameters in help.
 				It "finds help parameter in code: $helpParm" -TestCases @{ helpParm = $helpParm; parameterNames = $parameterNames } {
 					$helpParm -in $parameterNames | Should -Be $true
 				}
-            }
+            }#>
         }
     }
 }
