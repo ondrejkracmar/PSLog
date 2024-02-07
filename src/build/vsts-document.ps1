@@ -12,7 +12,7 @@ if (-not $WorkingDirectory) { $WorkingDirectory = Split-Path $PSScriptRoot }
 
 #define module for documentation
 
-$ModuleName = 'PSMicrosoftEntraID'
+$ModuleName = 'PSLog'
 if (Test-Path -Path "$($WorkingDirectory)/src/docs") {
 	$MarkdownPath = "$($WorkingDirectory)/src/docs"
 }
