@@ -12,6 +12,9 @@
 	.PARAMETER LoggerProvider
 		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
 
+	.PARAMETER AdditionalDataProvider
+		Aditional data provider
+
 	.EXAMPLE
 		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ConsoleLogger -AdditionalDataProvider $AdditionalDataProvider
 
