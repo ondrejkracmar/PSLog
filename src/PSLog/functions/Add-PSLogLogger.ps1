@@ -71,6 +71,7 @@
 		Add PSLogLogger to List
 
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
 	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'LoggerProvider')]
 	Param (
