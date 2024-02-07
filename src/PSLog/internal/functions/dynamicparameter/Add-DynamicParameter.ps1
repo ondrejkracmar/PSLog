@@ -125,6 +125,7 @@
         # At the end of the DynamicParam block, return the RuntimeDefinedParameterDictionary
         # Initialize all bound parameters using the provided block or similar code
     #>
+    [cmdletbinding(SupportsShouldProcess = $true)]
     param(
         [string]$Name,
         [System.Type]$Type = [string],

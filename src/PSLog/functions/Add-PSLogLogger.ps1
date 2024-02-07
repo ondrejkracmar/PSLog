@@ -37,7 +37,7 @@
 	.EXAMPLE
 		PS C:\> [System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider]]$additionalsProviders = New-Object System.Collections.Generic.List[Isystem.Infrastructure.Logging.IAdditionalDataProvider]
 		PS C:\> $additionalsProviders.Add((New-Object -TypeName Isystem.Infrastructure.Logging.CultureAdditionalDataProvider))
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProviders $additionalsProviders
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider FixedTimeZoneDateTimeProvider -TimeZoneId 'Morocco Standard Time' -LoggerProvider TextFileLogger -FilePath $HOME\Log\Test.log -AdditionalDataProvider $additionalsProviders
 
 		Add several PSLogLogger to list
 
@@ -65,7 +65,7 @@
 				}
 			}
 			"@ -ReferencedAssemblies  "$((Get-Module -Name  PSLog).Path | Split-Path)\imports\Isystem.Infrastructure.Logging.ApplicationInsights.dll" -Language CSharp
-		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProviders $additionalsProviders
+		PS C:\> $PSLogger = Add-PSLogLogger -DateTimeNowProvider UtcDateTimeProvider -LoggerProvider ApplicationInsightsLogger -ApplicationInsightsSettings (New-Object -TypeName "PSLog.ApplicationInsightsSettings") -AdditionalDataProvider $additionalsProviders
 
 		Add PSLogLogger to List
 
@@ -104,7 +104,7 @@
 
 			}
 		}
-		New-DynamicParameter -Name AdditionalDataProviders -Type System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider] -DPDictionary $paramDictionary
+		New-DynamicParameter -Name AdditionalDataProvider -Type System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider] -DPDictionary $paramDictionary
 		$paramDictionary
 	}
 
@@ -124,7 +124,7 @@
 		Invoke-PSFProtectedCommand -ActionString 'LoggerProvider.New' -ActionStringValues $LoggerProvider -Target (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerSubsystem.Name) -ScriptBlock {
 			switch ($LoggerProvider) {
 				ConsoleLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProviders
+					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider
 				}
 				TextFileLogger {
 					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
