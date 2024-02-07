@@ -102,7 +102,6 @@
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
 			$itemLogProvider.LogMessage($Message, $AdditionalData, $severityEnum )
-			[void]$listLoggerProviders.Add($itemLogProvider)
 		}
 	}
 

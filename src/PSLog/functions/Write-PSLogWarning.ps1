@@ -53,8 +53,7 @@ Function Write-PSLogWarning {
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			$itemLogProvider.LogWarning($Message)
-			[void]$listLoggerProviders.Add($itemLogProvider)
+			$itemLogProvider.LogWarning($Message)			
 		}
 	}
 

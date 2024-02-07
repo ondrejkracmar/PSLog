@@ -51,7 +51,7 @@ Function Write-PSLogError {
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-				$itemLogProvider.LogError($Message)
+			$itemLogProvider.LogError($Message)
 		}
 	}
 

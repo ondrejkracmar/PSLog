@@ -56,7 +56,6 @@ Function Write-PSLogCritical {
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
 			$itemLogProvider.LogCritical($Message)
-			[void]$listLoggerProviders.Add($itemLogProvider)
 		}
 	}
 
