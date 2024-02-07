@@ -11,7 +11,7 @@
 
 	.PARAMETER LoggerProvider
 		Logger provider type 'ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger'
-	
+
 	.PARAMETER AdditionalDataProvider
 		Add additiobal data provider
 
