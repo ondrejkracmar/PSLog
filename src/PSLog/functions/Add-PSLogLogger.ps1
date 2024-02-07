@@ -82,8 +82,7 @@
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
 		[string]$LoggerProvider,
 		[Parameter(ParameterSetName = 'LoggerProvider')]
-		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalDataProvider,
-		[switch]$EnableException
+		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalDataProvider
 	)
 
 	DynamicParam {
