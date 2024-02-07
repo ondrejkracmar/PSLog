@@ -85,7 +85,7 @@
 
 			}
 		}
-		New-DynamicParameter -Name AdditionalDataProvider -Type System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider] -DPDictionary $paramDictionary
+		New-DynamicParameter -Name AdditionalDataProvider -Type System.Collections.Generic.IEnumerable[Isystem.Infrastructure.Logging.IAdditionalDataProvider] -mandatory $false -DPDictionary $paramDictionary
 		$paramDictionary
 	}
 
