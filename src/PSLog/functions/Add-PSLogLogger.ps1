@@ -62,9 +62,7 @@
 		[string]$DateTimeNowProvider,
 		[Parameter(Mandatory = $true, ParameterSetName = 'LoggerProvider')]
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
-		[string]$LoggerProvider,
-		[Parameter(ParameterSetName = 'LoggerProvider')]
-		[Isystem.Infrastructure.Logging.IAdditionalDataProvider[]]$AdditionalDataProvider
+		[string]$LoggerProvider
 	)
 
 	DynamicParam {
