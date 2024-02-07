@@ -72,12 +72,12 @@
 
 	#>
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
-	[cmdletbinding(SupportsShouldProcess = $true)]
+	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'LoggerProvider')]
 	Param (
-		[Parameter(Mandatory = $true, Position = 0)]
+		[Parameter(Mandatory = $true, ParameterSetName = 'LoggerProvider', Position = 0)]
 		[ValidateSet('FixedTimeZoneDateTimeProvider', 'LocalDateTimeProvider', 'MockDateTimeProvider', 'UtcDateTimeProvider')]
 		[string]$DateTimeNowProvider,
-		[Parameter(Mandatory = $true, Position = 1)]
+		[Parameter(Mandatory = $true, ParameterSetName = 'LoggerProvider', Position = 1)]
 		[ValidateSet('ConsoleLogger', 'TextFileLogger', 'ApplicationInsightsLogger', 'EmailLogger')]
 		[string]$LoggerProvider,
 		[Parameter(Position = 2)]
