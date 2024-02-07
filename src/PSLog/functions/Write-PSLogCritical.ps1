@@ -39,6 +39,7 @@ Function Write-PSLogCritical {
 		Write crtical message
 
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[cmdletbinding(DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Message')]

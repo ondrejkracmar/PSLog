@@ -36,8 +36,8 @@ Function Write-PSLogWarning {
 		Write warning message
 
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[cmdletbinding(DefaultParameterSetName = 'Message')]
-
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Message')]
 		[ValidateNotNullOrEmpty()]
@@ -48,12 +48,11 @@ Function Write-PSLogWarning {
 	)
 
 	Begin {
-		$listLoggerProviders = New-Object System.Collections.ArrayList
 	}
 
 	Process {
 		foreach ($itemLogProvider in $LoggerProvider) {
-			$itemLogProvider.LogWarning($Message)			
+			$itemLogProvider.LogWarning($Message)
 		}
 	}
 

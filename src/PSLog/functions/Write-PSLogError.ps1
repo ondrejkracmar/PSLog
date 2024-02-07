@@ -35,6 +35,7 @@ Function Write-PSLogError {
 		Write ereor message
 
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[cmdletbinding(DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ParameterSetName = 'Message', ValueFromPipeline = $True)]

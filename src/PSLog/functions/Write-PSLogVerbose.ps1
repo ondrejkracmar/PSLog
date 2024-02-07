@@ -36,6 +36,7 @@ Function Write-PSLogVerbose {
 		Write verbose message
 
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[cmdletbinding(DefaultParameterSetName = 'Message')]
 	Param (
 		[parameter(Mandatory = $True, ValueFromPipeline = $True, ParameterSetName = 'Message')]
