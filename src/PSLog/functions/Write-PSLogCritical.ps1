@@ -22,6 +22,9 @@ Function Write-PSLogCritical {
         When you use the Confirm switch, you can step through changes to objects to make sure that changes are made only to the specific objects that you want to change.
         This functionality is useful when you apply changes to many objects and want precise control over the operation of the Shell.
         A confirmation prompt is displayed for each object before the Shell modifies the object.
+	
+	.PARAMETER ProgressAction
+		Specify the behavior of the progress bar.
 
 	.INPUTS
 		Isystem.Infrastructure.Core.ILogger[]]. Pipe objects.
