@@ -73,7 +73,7 @@
 	#>
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 	[OutputType('Isystem.Infrastructure.Core.ILogger')]
-	[CmdletBinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'LoggerProvider')]
+	[CmdletBinding(DefaultParameterSetName = 'LoggerProvider')]
 	Param (
 		[Parameter(Mandatory = $true, ParameterSetName = 'LoggerProvider')]
 		[ValidateSet('FixedTimeZoneDateTimeProvider', 'LocalDateTimeProvider', 'MockDateTimeProvider', 'UtcDateTimeProvider')]
@@ -123,27 +123,24 @@
 	}
 
 	Process {
-		Invoke-PSFProtectedCommand -ActionString 'LoggerProvider.New' -ActionStringValues $LoggerProvider -Target (Get-PSFLocalizedString -Module $script:ModuleName -Name LoggerSubsystem.Name) -ScriptBlock {
-			switch ($LoggerProvider) {
-				ConsoleLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider
-				}
-				TextFileLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
-				}
-				ApplicationInsightsLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings, $dateTimeProvider, $AdditionalDataProvider
-				}
-				EmailLogger {
-					[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService $dateTimeProvider, $AdditionalDataProvider
-				}
-				Default {
-
-				}
+		switch ($LoggerProvider) {
+			ConsoleLogger {
+				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider
 			}
-			$loggerProvider
-		} -EnableException $EnableException -PSCmdlet $PSCmdlet
-		if (Test-PSFFunctionInterrupt) { return }
+			TextFileLogger {
+				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
+			}
+			ApplicationInsightsLogger {
+				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings, $dateTimeProvider, $AdditionalDataProvider
+			}
+			EmailLogger {
+				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService $dateTimeProvider, $AdditionalDataProvider
+			}
+			Default {
+
+			}
+		}
+		$loggerProvider
 	}
 
 	End {
