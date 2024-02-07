@@ -36,7 +36,7 @@ Function Write-PSLogWarning {
 		Write warning message
 
 	#>
-	[cmdletbinding(SupportsShouldProcess = $true, DefaultParameterSetName = 'Message')]
+	[cmdletbinding(DefaultParameterSetName = 'Message')]
 
 	Param (
 		[parameter(Mandatory = $true, ValueFromPipeline = $true, ParameterSetName = 'Message')]
