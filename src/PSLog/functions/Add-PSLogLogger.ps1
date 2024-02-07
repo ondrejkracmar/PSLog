@@ -124,22 +124,22 @@
 	Process {
 		switch ($LoggerProvider) {
 			ConsoleLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider
+				[Isystem.Infrastructure.Core.ILogger]$logger = New-Object -TypeName $loggerProviderType -ArgumentList $dateTimeProvider, $AdditionalDataProvider
 			}
 			TextFileLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
+				[Isystem.Infrastructure.Core.ILogger]$logger = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.FilePath, $dateTimeProvider, $AdditionalDataProvider
 			}
 			ApplicationInsightsLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings, $dateTimeProvider, $AdditionalDataProvider
+				[Isystem.Infrastructure.Core.ILogger]$logger = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.ApplicationInsightsSettings, $dateTimeProvider, $AdditionalDataProvider
 			}
 			EmailLogger {
-				[Isystem.Infrastructure.Core.ILogger]$loggerProvider = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService $dateTimeProvider, $AdditionalDataProvider
+				[Isystem.Infrastructure.Core.ILogger]$logger = New-Object -TypeName $loggerProviderType -ArgumentList $PSBoundParameters.RecipientAddress, $PSBoundParameters.MailerService $dateTimeProvider, $AdditionalDataProvider
 			}
 			Default {
 
 			}
 		}
-		$loggerProvider
+		$logger
 	}
 
 	End {
