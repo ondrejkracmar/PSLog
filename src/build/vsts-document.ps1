@@ -20,8 +20,8 @@ else {
 	$MarkdownPath = New-Item -Path "$($WorkingDirectory)/src/" -Name 'docs' -ItemType Directory -Force
 }
 Import-Module "$($WorkingDirectory)/src/$($ModuleName)/$($ModuleName).psd1"
-if (Test-Path -Path "$($WorkingDirectory)/src/PSMicrosoftEntraID/en-us") {
-	$MamlPath = "$($WorkingDirectory)/src/PSMicrosoftEntraID/en-us"
+if (Test-Path -Path "$($WorkingDirectory)/src/PSLog/en-us") {
+	$MamlPath = "$($WorkingDirectory)/src/PSLog/en-us"
 }else {
 	$MamlPath = New-Item -Path "$($WorkingDirectory)/src/" -Name 'en-us' -ItemType Directory -Force
 }
